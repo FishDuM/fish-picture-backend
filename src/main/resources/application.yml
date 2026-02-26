@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: fish-picture-backend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/fish_picture
+    username: # 填写你自己的数据库用户名
+    password: # 填写你自己的数据库密码
+mybatis-plus:
+  configuration:
+    # 下划线转驼峰
+    map-underscore-to-camel-case: false
+    # 仅在开发环境开启日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: is_delete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
+      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+# 接口文档配置
+knife4j:
+  enable: true # 是否开始
+  openapi:
+    title: 小鱼云图库接口文档 # 接口文档标题
+    version: v1.0 # 版本
+    group: # 接口文档分组
+      default:
+        group-name: 默认分组
+        api-rule: package # 分组规则：按包分组
+        api-rule-resources:
+          - hk.fish.fishpicturebackend.controller # 指定要扫描的包
