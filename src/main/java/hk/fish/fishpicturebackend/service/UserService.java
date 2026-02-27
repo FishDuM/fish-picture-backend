@@ -18,4 +18,10 @@ public interface UserService extends IService<User> {
     long userRegister(UserRegisterRequest userRegisterRequest);
 
     LoginUserVO userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request);
+
+    // 获取当前登录用户
+    LoginUserVO getCurrentUser(HttpServletRequest request);
+
+    // 系统内部使用获取当前用户
+    User getCurrentUserInSystem(HttpServletRequest request);
 }

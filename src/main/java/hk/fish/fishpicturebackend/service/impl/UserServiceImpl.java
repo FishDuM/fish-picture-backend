@@ -67,6 +67,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user.getId();
     }
 
+    /**
+     * 用户登录
+     * @param userLoginRequest 用户登录请求类
+     * @return 用户信息
+     */
     @Override
     public LoginUserVO userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request) {
         // 提取参数
@@ -89,7 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = this.query().eq("user_account", userAccount).eq("user_password", userPassword).one();
 
         // 判断用户是否存在
-        ThrowUtils.throwIf(user == null, StatusCode.UN_LOGIN_ERROR, "用户不存在或密码错误");
+        ThrowUtils.throwIf(user == null || user.getIsDelete() == null, StatusCode.UN_LOGIN_ERROR, "用户不存在或密码错误");
 
         // 返回用户信息
         request.getSession().setAttribute(USER_LOGIN_STATUS, user);
@@ -97,7 +102,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     }
 
-    // 公共数据脱敏类
+    /**
+     * 获取当前登录用户(前端，用户信息脱敏)
+     * @param request 请求
+     * @return 当前登录用户
+     */
+    @Override
+    public LoginUserVO getCurrentUser(HttpServletRequest request) {
+        User user = this.getCurrentUserInSystem(request);
+        return this.Bean2OtherBean(user, LoginUserVO.class);
+    }
+
+    /**
+     * 获取当前用户信息(系统，用户信息未脱敏)
+     * @param request 请求
+     * @return 当前用户信息
+     */
+    @Override
+    public User getCurrentUserInSystem(HttpServletRequest request) {
+        // 判断是否已登录
+        User user = (User) request.getSession().getAttribute(USER_LOGIN_STATUS);
+        ThrowUtils.throwIf(user == null || user.getId() == null, StatusCode.UN_LOGIN_ERROR, "未登录");
+        // 防止不一致，从数据库再获取一遍
+        user = this.getById(user.getId());
+        // 防止被删除，但还能登录
+        ThrowUtils.throwIf(user == null, StatusCode.UN_LOGIN_ERROR, "用户不存在");
+        return user;
+    }
+
+    /**
+     * Bean转换
+     * @param originBean 源Bean
+     * @param targetBean 目标Bean
+     * @return 目标Bean
+     */
     private  <T, E> T  Bean2OtherBean(E originBean, Class<T> targetBean) {
         if (originBean == null || targetBean == null) {
             return null;
@@ -105,7 +143,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return BeanUtil.copyProperties(originBean, targetBean);
     }
 
-    // 公共md5加密方法
+    /**
+     * md5加密
+     * @param originString 原始字符串
+     * @return 加密后的字符串
+     */
     private String md5(String originString) {
         // 加盐为 fish
         return DigestUtils.md5DigestAsHex((originString+"fish").getBytes());

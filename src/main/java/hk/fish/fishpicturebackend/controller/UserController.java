@@ -36,4 +36,14 @@ public class UserController {
     public BaseResponse<LoginUserVO> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         return BaseResponse.success(userService.userLogin(userLoginRequest, request));
     }
+
+    /**
+     * 获取当前登录用户
+     * @param request 请求
+     * @return 当前用户信息
+     */
+    @GetMapping("/get/login")
+    public BaseResponse<LoginUserVO> getCurrentUser(HttpServletRequest request) {
+        return BaseResponse.success(userService.getCurrentUser(request));
+    }
 }
