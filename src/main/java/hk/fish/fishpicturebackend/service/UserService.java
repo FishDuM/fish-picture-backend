@@ -24,4 +24,7 @@ public interface UserService extends IService<User> {
 
     // 系统内部使用获取当前用户
     User getCurrentUserInSystem(HttpServletRequest request);
+
+    // 用户注销
+    void userLogout(HttpServletRequest request);
 }

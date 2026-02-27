@@ -26,7 +26,7 @@ public enum UserRole {
      * @param value 用户角色
      * @return 该用户角色对应的枚举类
      */
-    public UserRole getUserRoleByValue(String value) {
+    public static UserRole getUserRoleByValue(String value) {
         if(ObjectUtil.isEmpty(value)){
             return null;
         }

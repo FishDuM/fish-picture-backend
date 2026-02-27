@@ -1,14 +1,18 @@
 package hk.fish.fishpicturebackend.controller;
 
+import hk.fish.fishpicturebackend.annotation.AuthCheck;
 import hk.fish.fishpicturebackend.common.BaseResponse;
 import hk.fish.fishpicturebackend.domain.dto.UserLoginRequest;
 import hk.fish.fishpicturebackend.domain.dto.UserRegisterRequest;
+import hk.fish.fishpicturebackend.domain.enums.UserRole;
 import hk.fish.fishpicturebackend.domain.vo.LoginUserVO;
 import hk.fish.fishpicturebackend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import static hk.fish.fishpicturebackend.common.BaseCode.ADMIN;
 
 @RestController
 @RequestMapping("/user")
@@ -45,5 +49,16 @@ public class UserController {
     @GetMapping("/get/login")
     public BaseResponse<LoginUserVO> getCurrentUser(HttpServletRequest request) {
         return BaseResponse.success(userService.getCurrentUser(request));
+    }
+
+    /**
+     * 用户登出
+     * @param request 登出请求
+     * @return 登出成功
+     */
+    @PostMapping("/logout")
+    public BaseResponse<String> userLogout(HttpServletRequest request) {
+        userService.userLogout(request);
+        return BaseResponse.success("登出成功");
     }
 }

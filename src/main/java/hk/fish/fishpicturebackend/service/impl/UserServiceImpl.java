@@ -131,6 +131,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
+     * 用户登出
+     * @param request 请求
+     */
+    @Override
+    public void userLogout(HttpServletRequest request) {
+        // 获取当前用户
+        User user = this.getCurrentUserInSystem(request);
+        ThrowUtils.throwIf(user == null, StatusCode.UN_LOGIN_ERROR, "操作失败未登录");
+        // 移除登录态
+        request.getSession().removeAttribute(USER_LOGIN_STATUS);
+    }
+
+    /**
      * Bean转换
      * @param originBean 源Bean
      * @param targetBean 目标Bean
