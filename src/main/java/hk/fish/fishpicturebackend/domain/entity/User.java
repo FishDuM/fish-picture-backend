@@ -1,4 +1,4 @@
-package hk.fish.fishpicturebackend.domain;
+package hk.fish.fishpicturebackend.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -13,10 +13,17 @@ import lombok.Data;
 @TableName(value ="user")
 @Data
 public class User implements Serializable {
+
+    /**
+     * 序列化id
+     */
+    @TableField(exist = false) // 不参与sql
+    private static final long serialVersionUID = -4938294899063461638L;
+
     /**
      * id
      */
-    @TableId(type = IdType.ASSIGN_ID) // 主键自增策略
+    @TableId(type = IdType.ASSIGN_ID) // 主键自增策略(Long类型id)
     private Long id;
 
     /**

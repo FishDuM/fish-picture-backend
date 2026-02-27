@@ -1,6 +1,6 @@
 package hk.fish.fishpicturebackend.mapper;
 
-import hk.fish.fishpicturebackend.domain.User;
+import hk.fish.fishpicturebackend.domain.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

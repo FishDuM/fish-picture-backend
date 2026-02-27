@@ -72,6 +72,6 @@ public class BaseResponse<T> implements Serializable {
      * @return 包装后的异常
      */
     public static BaseResponse error(RuntimeException exception){
-        return new BaseResponse(StatusCode.SERVER_ERROR, null, exception.getMessage());
+        return new BaseResponse(StatusCode.SERVER_ERROR, null, "系统错误");
     }
 }
