@@ -1,4 +1,4 @@
-package hk.fish.fishpicturebackend.domain.dto;
+package hk.fish.fishpicturebackend.domain.dto.user;
 
 import lombok.Data;
 

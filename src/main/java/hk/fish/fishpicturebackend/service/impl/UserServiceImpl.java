@@ -2,11 +2,12 @@ package hk.fish.fishpicturebackend.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import hk.fish.fishpicturebackend.domain.dto.UserLoginRequest;
-import hk.fish.fishpicturebackend.domain.dto.UserRegisterRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserLoginRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserRegisterRequest;
 import hk.fish.fishpicturebackend.domain.entity.User;
 import hk.fish.fishpicturebackend.domain.enums.UserRole;
 import hk.fish.fishpicturebackend.domain.vo.LoginUserVO;
+import hk.fish.fishpicturebackend.domain.vo.UserVO;
 import hk.fish.fishpicturebackend.exception.StatusCode;
 import hk.fish.fishpicturebackend.exception.ThrowUtils;
 import hk.fish.fishpicturebackend.service.UserService;
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static hk.fish.fishpicturebackend.common.BaseCode.USER_LOGIN_STATUS;
 
@@ -144,12 +149,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
+     * 获取用户信息脱敏
+     * @param user 用户
+     * @return 用户信息脱敏
+     */
+    @Override
+    public UserVO getUserVO(User user) {
+        return Bean2OtherBean(user, UserVO.class);
+    }
+
+    /**
+     * 获取用户信息脱敏列表
+     * @param userList 用户列表
+     * @return 用户信息脱敏列表
+     */
+    @Override
+    public List<UserVO> getUserVOList(List<User> userList) {
+        if (userList == null){
+            return new ArrayList<>();
+        }
+        return userList.stream().map(this::getUserVO).collect(Collectors.toList());
+    }
+
+    /**
      * Bean转换
      * @param originBean 源Bean
      * @param targetBean 目标Bean
      * @return 目标Bean
      */
-    private  <T, E> T  Bean2OtherBean(E originBean, Class<T> targetBean) {
+    public  <T, E> T  Bean2OtherBean(E originBean, Class<T> targetBean) {
         if (originBean == null || targetBean == null) {
             return null;
         }
@@ -161,7 +189,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @param originString 原始字符串
      * @return 加密后的字符串
      */
-    private String md5(String originString) {
+    public String md5(String originString) {
         // 加盐为 fish
         return DigestUtils.md5DigestAsHex((originString+"fish").getBytes());
     }

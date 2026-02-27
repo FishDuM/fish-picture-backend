@@ -1,12 +1,14 @@
 package hk.fish.fishpicturebackend.service;
 
-import hk.fish.fishpicturebackend.domain.dto.UserLoginRequest;
-import hk.fish.fishpicturebackend.domain.dto.UserRegisterRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserLoginRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserRegisterRequest;
 import hk.fish.fishpicturebackend.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import hk.fish.fishpicturebackend.domain.vo.LoginUserVO;
+import hk.fish.fishpicturebackend.domain.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author 30574
@@ -27,4 +29,13 @@ public interface UserService extends IService<User> {
 
     // 用户注销
     void userLogout(HttpServletRequest request);
+
+    // 用户转换
+    UserVO getUserVO(User user);
+
+    // 获取用户脱敏的列表
+    List<UserVO> getUserVOList(List<User> userList);
+
+    // md5加密
+    String md5(String originString);
 }

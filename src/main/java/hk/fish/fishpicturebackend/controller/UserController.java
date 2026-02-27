@@ -1,18 +1,14 @@
 package hk.fish.fishpicturebackend.controller;
 
-import hk.fish.fishpicturebackend.annotation.AuthCheck;
 import hk.fish.fishpicturebackend.common.BaseResponse;
-import hk.fish.fishpicturebackend.domain.dto.UserLoginRequest;
-import hk.fish.fishpicturebackend.domain.dto.UserRegisterRequest;
-import hk.fish.fishpicturebackend.domain.enums.UserRole;
+import hk.fish.fishpicturebackend.domain.dto.user.UserLoginRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserRegisterRequest;
 import hk.fish.fishpicturebackend.domain.vo.LoginUserVO;
 import hk.fish.fishpicturebackend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
-import static hk.fish.fishpicturebackend.common.BaseCode.ADMIN;
 
 @RestController
 @RequestMapping("/user")
