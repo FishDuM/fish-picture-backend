@@ -1,8 +1,12 @@
 package hk.fish.fishpicturebackend.service;
 
+import hk.fish.fishpicturebackend.domain.dto.UserLoginRequest;
 import hk.fish.fishpicturebackend.domain.dto.UserRegisterRequest;
 import hk.fish.fishpicturebackend.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import hk.fish.fishpicturebackend.domain.vo.LoginUserVO;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
 * @author 30574
@@ -13,4 +17,5 @@ public interface UserService extends IService<User> {
 
     long userRegister(UserRegisterRequest userRegisterRequest);
 
+    LoginUserVO userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request);
 }
