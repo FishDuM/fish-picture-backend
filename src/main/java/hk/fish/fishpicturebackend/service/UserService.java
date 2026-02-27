@@ -1,6 +1,9 @@
 package hk.fish.fishpicturebackend.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import hk.fish.fishpicturebackend.domain.dto.user.UserAddRequest;
 import hk.fish.fishpicturebackend.domain.dto.user.UserLoginRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserQueryRequest;
 import hk.fish.fishpicturebackend.domain.dto.user.UserRegisterRequest;
 import hk.fish.fishpicturebackend.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -38,4 +41,10 @@ public interface UserService extends IService<User> {
 
     // md5加密
     String md5(String originString);
+
+    // 获取查询条件
+    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    // 管理员添加用户
+    Long addUser(UserAddRequest userAddRequest);
 }

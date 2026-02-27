@@ -11,4 +11,7 @@ public class BaseCode {
     public static final String ADMIN = "admin";
     public static final String USER = "user";
 
+    // 用户默认密码
+    public static final String BASE_PASSWORD = "12345678";
+
 }

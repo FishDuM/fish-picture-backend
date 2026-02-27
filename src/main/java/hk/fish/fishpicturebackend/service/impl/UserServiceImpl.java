@@ -1,13 +1,19 @@
 package hk.fish.fishpicturebackend.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import hk.fish.fishpicturebackend.domain.dto.user.UserAddRequest;
 import hk.fish.fishpicturebackend.domain.dto.user.UserLoginRequest;
+import hk.fish.fishpicturebackend.domain.dto.user.UserQueryRequest;
 import hk.fish.fishpicturebackend.domain.dto.user.UserRegisterRequest;
 import hk.fish.fishpicturebackend.domain.entity.User;
 import hk.fish.fishpicturebackend.domain.enums.UserRole;
 import hk.fish.fishpicturebackend.domain.vo.LoginUserVO;
 import hk.fish.fishpicturebackend.domain.vo.UserVO;
+import hk.fish.fishpicturebackend.exception.BusinessException;
 import hk.fish.fishpicturebackend.exception.StatusCode;
 import hk.fish.fishpicturebackend.exception.ThrowUtils;
 import hk.fish.fishpicturebackend.service.UserService;
@@ -21,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hk.fish.fishpicturebackend.common.BaseCode.USER_LOGIN_STATUS;
+import static hk.fish.fishpicturebackend.common.BaseCode.*;
 
 /**
 * @author 30574
@@ -193,6 +199,74 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 加盐为 fish
         return DigestUtils.md5DigestAsHex((originString+"fish").getBytes());
     }
+
+    /**
+     * 获取查询条件
+     *
+     * @param userQueryRequest 用户查询请求类
+     * @return 查询条件
+     */
+    @Override
+    public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        if (userQueryRequest == null) {
+            throw new BusinessException(StatusCode.PARAM_ERROR, "请求参数为空");
+        }
+        Long id = userQueryRequest.getId();
+        String userAccount = userQueryRequest.getUserAccount();
+        String userName = userQueryRequest.getUserName();
+        String userProfile = userQueryRequest.getUserProfile();
+        String userRole = userQueryRequest.getUserRole();
+        String sortField = userQueryRequest.getSortField();
+        String sortOrder = userQueryRequest.getSortOrder();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(ObjUtil.isNotNull(id), "id", id);
+        queryWrapper.eq(StrUtil.isNotBlank(userRole), "userRole", userRole);
+        queryWrapper.like(StrUtil.isNotBlank(userAccount), "userAccount", userAccount);
+        queryWrapper.like(StrUtil.isNotBlank(userName), "userName", userName);
+        queryWrapper.like(StrUtil.isNotBlank(userProfile), "userProfile", userProfile);
+        queryWrapper.orderBy(StrUtil.isNotEmpty(sortField), sortOrder.equals("ascend"), sortField);
+        return queryWrapper;
+    }
+
+    /**
+     * 管理员添加用户
+     *
+     * @param userAddRequest 用户添加请求类
+     * @return 添加结果
+     */
+    @Override
+    public Long addUser(UserAddRequest userAddRequest) {
+        // 获取参数
+        String userName = userAddRequest.getUserName();
+        String userAccount = userAddRequest.getUserAccount();
+        String userRole = userAddRequest.getUserRole();
+
+        // 校验参数是否为空
+        ThrowUtils.throwIf(StrUtil.isBlank(userName) || StrUtil.isBlank(userAccount), StatusCode.PARAM_ERROR, "参数不能为空");
+        // 校验参数长度
+        ThrowUtils.throwIf(userName.length() > 16 || userAccount.length() < 7 || userAccount.length() > 16, StatusCode.PARAM_ERROR, "参数长度错误");
+
+        // 转换为User
+        User user = Bean2OtherBean(userAddRequest, User.class);
+
+        // 判断角色是否为空
+        if (StrUtil.isBlank(userRole)){
+            // 为空自动添加用户角色
+            user.setUserRole(USER);
+        }
+        // 设置默认密码
+        user.setUserPassword(md5(BASE_PASSWORD));
+        // 查询账号是否已存在
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_account", userAccount);
+        ThrowUtils.throwIf(this.count(queryWrapper) > 0, StatusCode.PARAM_ERROR, "账号已存在");
+
+        // 插入数据
+        boolean save = this.save(user);
+        ThrowUtils.throwIf(!save, StatusCode.SERVER_ERROR, "添加失败");
+        return user.getId();
+    }
+
 }
 
 
