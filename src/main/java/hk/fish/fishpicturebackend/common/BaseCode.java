@@ -14,4 +14,7 @@ public class BaseCode {
     // 用户默认密码
     public static final String BASE_PASSWORD = "12345678";
 
+    // 用户默认名前缀
+    public static final String BASE_NAME = "小鱼苗_";
+
 }
