@@ -217,7 +217,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         Long id = userQueryRequest.getId();
         String userAccount = userQueryRequest.getUserAccount();
-        String userName = userQueryRequest.getUserName();
+        String userName = userQueryRequest.getUsername();
         String userProfile = userQueryRequest.getUserProfile();
         String userRole = userQueryRequest.getUserRole();
         String sortField = userQueryRequest.getSortField();
@@ -241,7 +241,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Long addUser(UserAddRequest userAddRequest) {
         // 获取参数
-        String userName = userAddRequest.getUserName();
+        String userName = userAddRequest.getUsername();
         String userAccount = userAddRequest.getUserAccount();
         String userRole = userAddRequest.getUserRole();
 
