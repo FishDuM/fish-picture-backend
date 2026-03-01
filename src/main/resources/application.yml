@@ -33,3 +33,18 @@ knife4j:
         api-rule: package # 分组规则：按包分组
         api-rule-resources:
           - hk.fish.fishpicturebackend.controller # 指定要扫描的包
+# 对象存储配置（需要从腾讯云获取）
+cos:
+  client:
+    # COS 的访问域名
+    #格式一般：bucket-appid.cos.region.myqcloud.com
+    host: xxx
+    # 腾讯云账号密钥 ID
+    secretId: xxx
+    # 腾讯云账号密钥 KEY
+    secretKey: xxx
+    # 存储桶地域
+    region: xxx
+    # 存储桶名称（你在腾讯云 COS 里创建的桶名字）
+    #格式通常：存储桶名-APPID
+    bucket: xxx
