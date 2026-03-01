@@ -47,4 +47,7 @@ public interface UserService extends IService<User> {
 
     // 管理员添加用户
     Long addUser(UserAddRequest userAddRequest);
+
+    // 判断用户是否为管理员
+    boolean isAdmin(User user);
 }

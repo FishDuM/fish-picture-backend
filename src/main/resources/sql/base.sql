@@ -18,7 +18,9 @@ CREATE TABLE `user` (
                         PRIMARY KEY (`id`),
                         UNIQUE KEY `uk_userAccount` (`user_account`),
                         KEY `idx_userName` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT ='用户';
 
 -- 图片表
 create table if not exists picture

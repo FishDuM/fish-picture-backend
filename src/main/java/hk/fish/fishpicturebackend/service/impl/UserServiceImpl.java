@@ -276,6 +276,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user.getId();
     }
 
+    /**
+     * 判断是否为管理员
+     *
+     * @param user 用户
+     * @return 是否为管理员
+     */
+    @Override
+    public boolean isAdmin(User user) {
+        return user != null && UserRole.ADMIN.getValue().equals(user.getUserRole());
+    }
+
 }
 
 

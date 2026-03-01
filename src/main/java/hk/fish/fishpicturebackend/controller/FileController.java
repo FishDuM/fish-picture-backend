@@ -8,7 +8,7 @@ import hk.fish.fishpicturebackend.common.BaseResponse;
 import hk.fish.fishpicturebackend.exception.BusinessException;
 import hk.fish.fishpicturebackend.exception.StatusCode;
 import hk.fish.fishpicturebackend.exception.ThrowUtils;
-import hk.fish.fishpicturebackend.manager.CosManage;
+import hk.fish.fishpicturebackend.manager.CosManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +25,7 @@ import static hk.fish.fishpicturebackend.common.BaseCode.ADMIN;
 @Slf4j
 public class FileController {
     @Resource
-    private CosManage cosManage;
+    private CosManager cosManager;
 
     @AuthCheck(mustRole = ADMIN)
     @PostMapping("/test/upload")
@@ -43,7 +43,7 @@ public class FileController {
             // 将上传的文件保存到临时文件
             multipartFile.transferTo(tempFile);
             // 上传文件
-            cosManage.putObject(filePath, tempFile);
+            cosManager.putObject(filePath, tempFile);
             // 返回文件路径
             return BaseResponse.success(filePath);
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class FileController {
     public void testDownloadFile(String filepath, HttpServletResponse response) throws IOException {
         COSObjectInputStream cosObjectInput = null;
         try {
-            COSObject cosObject = cosManage.getObject(filepath);
+            COSObject cosObject = cosManager.getObject(filepath);
             cosObjectInput = cosObject.getObjectContent();
             // 处理下载到的流
             byte[] bytes = IOUtils.toByteArray(cosObjectInput);
